@@ -1,0 +1,394 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0f0f12" />
+  <title>NativePost Kit — Manual-ready posting checklist for creators</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@500;700&family=Manrope:wght@400;600;700&display=swap');
+    :root {
+      --bg: #0f0f12;
+      --surface: #17181d;
+      --text: #f5f2ea;
+      --muted: #b7b2a6;
+      --accent: #ff8a3d;
+      --accent-2: #ffd07a;
+      --stroke: #2a2c34;
+    }
+    * { box-sizing: border-box; }
+    html { color-scheme: dark; }
+    body {
+      margin: 0;
+      font-family: "Manrope", system-ui, -apple-system, Segoe UI, sans-serif;
+      background: radial-gradient(1200px 500px at 10% 0%, #1e1b14 0%, #0f0f12 55%);
+      color: var(--text);
+    }
+    @keyframes riseFade {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .fade {
+      animation: riseFade 0.8s ease forwards;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .fade { animation: none; }
+    }
+    .skip {
+      position: absolute;
+      left: -999px;
+      top: 12px;
+      background: #22232a;
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--stroke);
+      z-index: 10;
+    }
+    .skip:focus { left: 12px; }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 28px 20px 60px;
+    }
+    .hero {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      background: #1b1c22;
+      border: 1px solid var(--stroke);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    h1 {
+      font-family: "Fraunces", "Manrope", serif;
+      font-size: clamp(28px, 4vw, 44px);
+      line-height: 1.05;
+      margin: 14px 0 12px;
+      text-wrap: balance;
+    }
+    .subtitle {
+      color: var(--muted);
+      font-size: 16px;
+      max-width: 560px;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--stroke);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.25);
+    }
+    .card.fade { animation-delay: 0.12s; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+    }
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+    input, textarea, select {
+      width: 100%;
+      background: #111218;
+      color: var(--text);
+      border: 1px solid var(--stroke);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    button {
+      background: linear-gradient(120deg, var(--accent), var(--accent-2));
+      color: #1a0f00;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible {
+      outline: 2px solid #ffd07a;
+      outline-offset: 2px;
+    }
+    button.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--stroke);
+    }
+    button:hover { filter: brightness(1.05); }
+    button.secondary:hover { background: #1b1c22; }
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--stroke);
+      background: #111218;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .output {
+      margin-top: 26px;
+      display: grid;
+      gap: 14px;
+    }
+    .platform-card {
+      border: 1px solid var(--stroke);
+      border-radius: 16px;
+      padding: 14px;
+      background: #14151b;
+    }
+    .platform-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .platform-title {
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .checklist {
+      display: grid;
+      gap: 6px;
+      margin: 10px 0;
+    }
+    .checklist li { color: var(--muted); font-size: 13px; }
+    .caption-box {
+      background: #0f0f12;
+      border: 1px dashed #2f3140;
+      padding: 10px;
+      border-radius: 10px;
+      font-size: 13px;
+      white-space: pre-wrap;
+    }
+    .copy-btn {
+      background: transparent;
+      border: 1px solid var(--stroke);
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+    }
+    .error {
+      color: #ff9a90;
+      font-size: 13px;
+      margin-top: 8px;
+      display: none;
+    }
+    .footer {
+      margin-top: 34px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <main id="main">
+  <div class="wrap">
+    <section class="hero fade">
+      <div>
+        <span class="badge">Native-post workflow • zero scheduler required</span>
+        <h1>NativePost Kit</h1>
+        <p class="subtitle">When schedulers feel pricey and TikTok still needs manual publishing, this generates a cross‑platform, manual‑ready posting checklist + captions you can copy in one session.</p>
+        <div class="pill-row">
+          <span class="pill">Actor: solo content creators</span>
+          <span class="pill">Trigger: ready to publish new content</span>
+          <span class="pill">Artifact: per‑platform posting kit</span>
+        </div>
+      </div>
+      <div class="card fade">
+        <div class="grid">
+          <div>
+            <label for="title">Content title / hook</label>
+            <input id="title" name="title" autocomplete="off" placeholder="e.g., 3 mistakes killing your short‑form reach…" />
+          </div>
+          <div>
+            <label for="goal">Primary CTA</label>
+            <input id="goal" name="goal" autocomplete="off" placeholder="e.g., Subscribe for weekly breakdowns…" />
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <label for="caption">Base caption (raw)</label>
+          <textarea id="caption" name="caption" autocomplete="off" placeholder="Paste your raw caption or talking points…"></textarea>
+        </div>
+        <div class="grid" style="margin-top:12px;">
+          <div>
+            <label for="hashtags">Hashtags / tags</label>
+            <input id="hashtags" name="hashtags" autocomplete="off" placeholder="#creator #tiktok #growth…" />
+          </div>
+          <div>
+            <label for="format">Content format</label>
+            <select id="format" name="format">
+              <option value="short">Short video</option>
+              <option value="carousel">Carousel</option>
+              <option value="long">Long video</option>
+              <option value="live">Live clip</option>
+            </select>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <label>Platforms (manual native posting)</label>
+          <div class="pill-row">
+            <label class="pill"><input type="checkbox" value="TikTok" checked /> TikTok</label>
+            <label class="pill"><input type="checkbox" value="Instagram" checked /> Instagram</label>
+            <label class="pill"><input type="checkbox" value="YouTube Shorts" /> YouTube Shorts</label>
+            <label class="pill"><input type="checkbox" value="X" /> X</label>
+            <label class="pill"><input type="checkbox" value="LinkedIn" /> LinkedIn</label>
+          </div>
+        </div>
+        <div class="actions">
+          <button id="generate">Generate native-post kit</button>
+          <button class="secondary" id="sample">Load sample</button>
+        </div>
+        <div class="error" id="error" role="status" aria-live="polite">Add a base caption and choose at least one platform.</div>
+      </div>
+    </section>
+
+    <section class="output" id="output"></section>
+
+    <section class="footer">
+      This MVP deliberately does NOT auto‑post or replace schedulers. It keeps you native and manual, while removing the repetitive prep work.
+    </section>
+  </div>
+  </main>
+
+  <script>
+    const checklistMap = {
+      "TikTok": [
+        "Upload natively on mobile (no scheduler)",
+        "Use trending sound if relevant",
+        "Pin the CTA in first comment",
+        "Reply to first 3 comments within 15 minutes"
+      ],
+      "Instagram": [
+        "Post natively (Reels) and toggle share to feed",
+        "Add 3-5 niche hashtags",
+        "Pin a CTA comment",
+        "Share to Stories within 10 minutes"
+      ],
+      "YouTube Shorts": [
+        "Title with strong hook (45-55 chars)",
+        "Add 2-3 tags in description",
+        "Pin a comment with CTA",
+        "Add to relevant playlist"
+      ],
+      "X": [
+        "Shorten caption to 1-2 lines",
+        "Add 1 keyword hashtag max",
+        "Reply to your post with context",
+        "Repost after 6 hours if needed"
+      ],
+      "LinkedIn": [
+        "Add first line hook + whitespace",
+        "Avoid hashtag pile (max 3)",
+        "Ask a question in CTA",
+        "Engage with 5 replies in first hour"
+      ]
+    };
+
+    const formatTweaks = {
+      short: "Keep it punchy. Lead with the hook in the first sentence.",
+      carousel: "Add slide breaks + numbered beats.",
+      long: "Expand the middle with one concrete example.",
+      live: "Mention that this is from a live session and invite feedback."
+    };
+
+    const output = document.getElementById("output");
+    const error = document.getElementById("error");
+
+    function getSelectedPlatforms() {
+      return Array.from(document.querySelectorAll("input[type=checkbox]:checked")).map(cb => cb.value);
+    }
+
+    function buildCaption(base, goal, hashtags, platform, format) {
+      const cta = goal ? `\n\n${goal}` : "";
+      const hash = hashtags ? `\n\n${hashtags}` : "";
+      const tweak = formatTweaks[format];
+      return `${base}\n\n${tweak}\n\nPlatform note: ${platform}.${cta}${hash}`.trim();
+    }
+
+    function render() {
+      const base = document.getElementById("caption").value.trim();
+      const title = document.getElementById("title").value.trim();
+      const goal = document.getElementById("goal").value.trim();
+      const hashtags = document.getElementById("hashtags").value.trim();
+      const format = document.getElementById("format").value;
+      const platforms = getSelectedPlatforms();
+
+      if (!base || platforms.length === 0) {
+        error.style.display = "block";
+        output.innerHTML = "";
+        return;
+      }
+      error.style.display = "none";
+
+      output.innerHTML = platforms.map(platform => {
+        const caption = buildCaption(base, goal, hashtags, platform, format);
+        const checklist = checklistMap[platform].map(item => `<li>${item}</li>`).join("");
+        return `
+          <div class="platform-card">
+            <div class="platform-header">
+              <div>
+                <div class="platform-title">${platform}</div>
+                <div style="font-size:12px;color:var(--muted)">${title || "Untitled draft"}</div>
+              </div>
+              <button class="copy-btn" data-caption="${encodeURIComponent(caption)}">Copy caption</button>
+            </div>
+            <div class="caption-box">${caption.replace(/\n/g, "<br>")}</div>
+            <ul class="checklist">${checklist}</ul>
+          </div>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".copy-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const text = decodeURIComponent(btn.dataset.caption);
+          navigator.clipboard.writeText(text);
+          btn.textContent = "Copied";
+          setTimeout(() => (btn.textContent = "Copy caption"), 1400);
+        });
+      });
+    }
+
+    document.getElementById("generate").addEventListener("click", render);
+    document.getElementById("sample").addEventListener("click", () => {
+      document.getElementById("title").value = "3 hooks that doubled my short‑form reach";
+      document.getElementById("goal").value = "Grab the full template in bio";
+      document.getElementById("caption").value = "Hook 1: Show the payoff in 3 seconds.\nHook 2: Use a bold claim + proof.\nHook 3: Ask a painful question.";
+      document.getElementById("hashtags").value = "#creator #tiktok #reels";
+      render();
+    });
+  </script>
+</body>
+</html>
